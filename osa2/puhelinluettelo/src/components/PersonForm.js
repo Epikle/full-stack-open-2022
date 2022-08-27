@@ -39,7 +39,7 @@ const PersonForm = (props) => {
             setNewName('');
             setNewNumber('');
           })
-          .catch((err) => {
+          .catch((error) => {
             props.setError(true);
             props.setMessage(
               `Information of ${newName} has already been removed from server`
@@ -49,12 +49,17 @@ const PersonForm = (props) => {
       return;
     }
 
-    createPerson(newPerson).then((returnedPerson) => {
-      props.setPersons(props.persons.concat(returnedPerson));
-      props.setMessage(`Added ${newName}`);
-      setNewName('');
-      setNewNumber('');
-    });
+    createPerson(newPerson)
+      .then((returnedPerson) => {
+        props.setPersons(props.persons.concat(returnedPerson));
+        props.setMessage(`Added ${newName}`);
+        setNewName('');
+        setNewNumber('');
+      })
+      .catch((error) => {
+        props.setError(true);
+        props.setMessage(error.response.data.error);
+      });
   };
 
   const nameHandler = (event) => {
